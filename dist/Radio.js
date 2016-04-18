@@ -62,21 +62,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.on = on;
-	exports.off = off;
-	exports.emit = emit;
-	exports.request = request;
-	exports.reply = reply;
-	exports.replyOnce = replyOnce;
-	exports.stopReplying = stopReplying;
-	exports.reset = reset;
 	
-	
-	// Requests
-	var _requests = {};
-	
-	// Events
-	var _events = {};
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	function createEvent() {
 	    return {
@@ -84,141 +71,141 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	}
 	
-	function on(evt, cb) {
+	var SimpleRadio = function () {
+	    function SimpleRadio() {
+	        _classCallCheck(this, SimpleRadio);
 	
-	    // Type and value check
-	    if (!evt || !cb || typeof evt !== 'string' || typeof cb !== 'function') {
-	        return;
+	        this._requests = {};
+	        this._events = {};
 	    }
 	
-	    // Find event
-	    var storedEvent = _events[evt];
+	    SimpleRadio.prototype.on = function on(evt, cb) {
+	        // Type and value check
+	        if (!evt || !cb || typeof evt !== 'string' || typeof cb !== 'function') {
+	            return;
+	        }
 	
-	    // Create event if it doesn't exist
-	    if (!storedEvent) {
-	        storedEvent = _events[evt] = createEvent();
-	    }
+	        // Find event
+	        var storedEvent = this._events[evt];
 	
-	    // Add handler
-	    storedEvent.handlers.push(cb);
-	}
+	        // Create event if it doesn't exist
+	        if (!storedEvent) {
+	            storedEvent = this._events[evt] = createEvent();
+	        }
 	
-	function off(evt, cb) {
+	        // Add handler
+	        storedEvent.handlers.push(cb);
+	    };
 	
-	    // Type and value check
-	    if (!evt || !cb || typeof evt !== 'string' || typeof cb !== 'function') {
-	        return;
-	    }
+	    SimpleRadio.prototype.off = function off(evt, cb) {
+	        // Type and value check
+	        if (!evt || !cb || typeof evt !== 'string' || typeof cb !== 'function') {
+	            return;
+	        }
 	
-	    // Find event
-	    var storedEvent = _events[evt];
+	        // Find event
+	        var storedEvent = this._events[evt];
 	
-	    // Exit if it doesn't exist
-	    if (!storedEvent) {
-	        return;
-	    }
+	        // Exit if it doesn't exist
+	        if (!storedEvent) {
+	            return;
+	        }
 	
-	    // Find and remove cb
-	    storedEvent.handlers = storedEvent.handlers.filter(function (x) {
-	        return x !== cb;
-	    });
-	}
+	        // Find and remove cb
+	        storedEvent.handlers = storedEvent.handlers.filter(function (x) {
+	            return x !== cb;
+	        });
+	    };
 	
-	function emit(evt, data) {
-	    // Type and value check
-	    if (!evt || typeof evt !== 'string') {
-	        return;
-	    }
+	    SimpleRadio.prototype.emit = function emit(evt, data) {
+	        // Type and value check
+	        if (!evt || typeof evt !== 'string') {
+	            return;
+	        }
 	
-	    // Find event
-	    var storedEvent = _events[evt];
+	        // Find event
+	        var storedEvent = this._events[evt];
 	
-	    // Exit if it doesn't exist
-	    if (!storedEvent) {
-	        return;
-	    }
+	        // Exit if it doesn't exist
+	        if (!storedEvent) {
+	            return;
+	        }
 	
-	    // Execute each handler
-	    storedEvent.handlers.forEach(function (cb) {
-	        return cb(data);
-	    });
-	}
+	        // Execute each handler
+	        storedEvent.handlers.forEach(function (cb) {
+	            return cb(data);
+	        });
+	    };
 	
-	function request(req, data) {
+	    SimpleRadio.prototype.request = function request(req, data) {
+	        // Type and value check
+	        if (!req || typeof req !== 'string') {
+	            return undefined;
+	        }
 	
-	    // Type and value check
-	    if (!req || typeof req !== 'string') {
-	        return undefined;
-	    }
+	        // Find and call cb
+	        var cb = this._requests[req];
 	
-	    // Find and call cb
-	    var cb = _requests[req];
+	        // Return undefined if no callback registered
+	        if (!cb) {
+	            return undefined;
+	        }
 	
-	    // Return undefined if no callback registered
-	    if (!cb) {
-	        return undefined;
-	    }
-	
-	    return cb(data);
-	}
-	
-	function reply(req, cb) {
-	
-	    // Type and value check
-	    if (!req || !cb || typeof req !== 'string' || typeof cb !== 'function') {
-	        return;
-	    }
-	
-	    // Add cb to object
-	    _requests[req] = cb;
-	}
-	
-	function replyOnce(req, cb) {
-	
-	    // Type and value check
-	    if (!req || !cb || typeof req !== 'string' || typeof cb !== 'function') {
-	        return;
-	    }
-	
-	    // Wrap callback fn to remove after first execution
-	    var wrappedCb = function wrappedCb(data) {
-	        stopReplying(req);
 	        return cb(data);
 	    };
 	
-	    reply(req, wrappedCb);
-	}
+	    SimpleRadio.prototype.reply = function reply(req, cb) {
+	        // Type and value check
+	        if (!req || !cb || typeof req !== 'string' || typeof cb !== 'function') {
+	            return;
+	        }
 	
-	function stopReplying(req) {
+	        // Add cb to object
+	        this._requests[req] = cb;
+	    };
 	
-	    // Type and value check
-	    if (!req || typeof req !== 'string') {
-	        return;
-	    }
+	    SimpleRadio.prototype.replyOnce = function replyOnce(req, cb) {
+	        var _this = this;
 	
-	    // Remove callback fn
-	    delete _requests[req];
-	}
+	        // Type and value check
+	        if (!req || !cb || typeof req !== 'string' || typeof cb !== 'function') {
+	            return;
+	        }
 	
-	function reset() {
-	    Object.keys(_requests).forEach(function (x) {
-	        return delete _requests[x];
-	    });
-	    Object.keys(_events).forEach(function (x) {
-	        return delete _events[x];
-	    });
-	}
+	        // Wrap callback fn to remove after first execution
+	        var wrappedCb = function wrappedCb(data) {
+	            _this.stopReplying(req);
+	            return cb(data);
+	        };
 	
-	exports.default = {
-	    on: on,
-	    off: off,
-	    emit: emit,
-	    request: request,
-	    reply: reply,
-	    replyOnce: replyOnce,
-	    stopReplying: stopReplying,
-	    reset: reset
-	};
+	        this.reply(req, wrappedCb);
+	    };
+	
+	    SimpleRadio.prototype.stopReplying = function stopReplying(req) {
+	        // Type and value check
+	        if (!req || typeof req !== 'string') {
+	            return;
+	        }
+	
+	        // Remove callback fn
+	        delete this._requests[req];
+	    };
+	
+	    SimpleRadio.prototype.reset = function reset() {
+	        var _this2 = this;
+	
+	        Object.keys(this._requests).forEach(function (x) {
+	            return delete _this2._requests[x];
+	        });
+	        Object.keys(this._events).forEach(function (x) {
+	            return delete _this2._events[x];
+	        });
+	    };
+	
+	    return SimpleRadio;
+	}();
+	
+	exports.default = SimpleRadio;
 
 /***/ }
 /******/ ])

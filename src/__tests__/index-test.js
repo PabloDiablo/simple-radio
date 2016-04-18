@@ -1,6 +1,7 @@
 jest.dontMock('../index');
 
-var Radio = require('../index');
+var SimpleRadio = require('../index').default;
+var Radio = new SimpleRadio();
 
 describe('Radio', () => {
 
