@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["Radio"] = factory();
+		exports["SimpleRadio"] = factory();
 	else
-		root["Radio"] = factory();
+		root["SimpleRadio"] = factory();
 })(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -211,4 +211,4 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ ])
 });
 ;
-//# sourceMappingURL=Radio.js.map
+//# sourceMappingURL=SimpleRadio.js.map

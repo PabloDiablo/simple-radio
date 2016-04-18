@@ -8,9 +8,9 @@ module.exports = {
 
     output: {
         path: __dirname + "/dist",
-        filename: isDebug ? 'Radio.js' : 'Radio.min.js',
+        filename: isDebug ? 'SimpleRadio.js' : 'SimpleRadio.min.js',
         libraryTarget: 'umd',
-        library: 'Radio'
+        library: 'SimpleRadio'
     },
 
     module: {
