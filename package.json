@@ -7,7 +7,7 @@
     "events",
     "radio"
   ],
-  "main": "./src/index.js",
+  "main": "./dist/SimpleRadio.js",
   "scripts": {
     "test": "jest",
     "build": "NODE_ENV=production webpack -p",
