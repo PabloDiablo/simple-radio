@@ -57,10 +57,10 @@ return /******/ (function(modules) { // webpackBootstrap
   \**********************/
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 	exports.on = on;
 	exports.off = off;
@@ -69,19 +69,156 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.reply = reply;
 	exports.replyOnce = replyOnce;
 	exports.stopReplying = stopReplying;
-	function on(evt, cb) {}
+	exports.reset = reset;
 	
-	function off(evt, cb) {}
 	
-	function emit(evt, data) {}
+	// Requests
+	var _requests = {};
 	
-	function request(req) {}
+	// Events
+	var _events = {};
 	
-	function reply(req, cb) {}
+	function createEvent() {
+	    return {
+	        handlers: []
+	    };
+	}
 	
-	function replyOnce(req, cb) {}
+	function on(evt, cb) {
 	
-	function stopReplying(req, cb) {}
+	    // Type and value check
+	    if (!evt || !cb || typeof evt !== 'string' || typeof cb !== 'function') {
+	        return;
+	    }
+	
+	    // Find event
+	    var storedEvent = _events[evt];
+	
+	    // Create event if it doesn't exist
+	    if (!storedEvent) {
+	        storedEvent = _events[evt] = createEvent();
+	    }
+	
+	    // Add handler
+	    storedEvent.handlers.push(cb);
+	}
+	
+	function off(evt, cb) {
+	
+	    // Type and value check
+	    if (!evt || !cb || typeof evt !== 'string' || typeof cb !== 'function') {
+	        return;
+	    }
+	
+	    // Find event
+	    var storedEvent = _events[evt];
+	
+	    // Exit if it doesn't exist
+	    if (!storedEvent) {
+	        return;
+	    }
+	
+	    // Find and remove cb
+	    storedEvent.handlers = storedEvent.handlers.filter(function (x) {
+	        return x !== cb;
+	    });
+	}
+	
+	function emit(evt, data) {
+	    // Type and value check
+	    if (!evt || typeof evt !== 'string') {
+	        return;
+	    }
+	
+	    // Find event
+	    var storedEvent = _events[evt];
+	
+	    // Exit if it doesn't exist
+	    if (!storedEvent) {
+	        return;
+	    }
+	
+	    // Execute each handler
+	    storedEvent.handlers.forEach(function (cb) {
+	        return cb();
+	    });
+	}
+	
+	function request(req) {
+	
+	    // Type and value check
+	    if (!req || typeof req !== 'string') {
+	        return undefined;
+	    }
+	
+	    // Find and call cb
+	    var cb = _requests[req];
+	
+	    // Return undefined if no callback registered
+	    if (!cb) {
+	        return undefined;
+	    }
+	
+	    return cb();
+	}
+	
+	function reply(req, cb) {
+	
+	    // Type and value check
+	    if (!req || !cb || typeof req !== 'string' || typeof cb !== 'function') {
+	        return;
+	    }
+	
+	    // Add cb to object
+	    _requests[req] = cb;
+	}
+	
+	function replyOnce(req, cb) {
+	
+	    // Type and value check
+	    if (!req || !cb || typeof req !== 'string' || typeof cb !== 'function') {
+	        return;
+	    }
+	
+	    // Wrap callback fn to remove after first execution
+	    var wrappedCb = function wrappedCb() {
+	        stopReplying(req);
+	        return cb();
+	    };
+	
+	    reply(req, wrappedCb);
+	}
+	
+	function stopReplying(req) {
+	
+	    // Type and value check
+	    if (!req || typeof req !== 'string') {
+	        return;
+	    }
+	
+	    // Remove callback fn
+	    delete _requests[req];
+	}
+	
+	function reset() {
+	    Object.keys(_requests).forEach(function (x) {
+	        return delete _requests[x];
+	    });
+	    Object.keys(_events).forEach(function (x) {
+	        return delete _events[x];
+	    });
+	}
+	
+	exports.default = {
+	    on: on,
+	    off: off,
+	    emit: emit,
+	    request: request,
+	    reply: reply,
+	    replyOnce: replyOnce,
+	    stopReplying: stopReplying,
+	    reset: reset
+	};
 
 /***/ }
 /******/ ])
