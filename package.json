@@ -1,15 +1,25 @@
 {
   "name": "simple-radio",
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple pubsub radio",
+  "keywords": [
+    "pubsub",
+    "events",
+    "radio"
+  ],
   "main": "./src/index.js",
   "scripts": {
     "test": "jest",
     "build": "NODE_ENV=production webpack -p",
     "watch": "NODE_ENV=debug webpack -d --progress --colors --watch"
   },
-  "author": "",
+  "author": "Paul Crane",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PabloDiablo/simple-radio"
+  },
+  "bugs": "https://github.com/PabloDiablo/simple-radio/issues",
   "dependencies": {},
   "devDependencies": {
     "babel-core": "^6.7.2",
