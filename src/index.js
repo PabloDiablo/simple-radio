@@ -65,10 +65,10 @@ export function emit(evt: string, data: Object): void {
     }
 
     // Execute each handler
-    storedEvent.handlers.forEach(cb => cb());
+    storedEvent.handlers.forEach(cb => cb(data));
 }
 
-export function request(req: string): any {
+export function request(req: string, data: Object): any {
 
     // Type and value check
     if (!req || typeof req !== 'string') {
@@ -83,7 +83,7 @@ export function request(req: string): any {
         return undefined;
     }
 
-    return cb();
+    return cb(data);
 }
 
 export function reply(req: string, cb: Function): void {
@@ -105,9 +105,9 @@ export function replyOnce(req: string, cb: Function): void {
     }
 
     // Wrap callback fn to remove after first execution
-    const wrappedCb = function () {
+    const wrappedCb = function (data) {
         stopReplying(req);
-        return cb();
+        return cb(data);
     };
 
     reply(req, wrappedCb);

@@ -140,11 +140,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    // Execute each handler
 	    storedEvent.handlers.forEach(function (cb) {
-	        return cb();
+	        return cb(data);
 	    });
 	}
 	
-	function request(req) {
+	function request(req, data) {
 	
 	    // Type and value check
 	    if (!req || typeof req !== 'string') {
@@ -159,7 +159,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return undefined;
 	    }
 	
-	    return cb();
+	    return cb(data);
 	}
 	
 	function reply(req, cb) {
@@ -181,9 +181,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	
 	    // Wrap callback fn to remove after first execution
-	    var wrappedCb = function wrappedCb() {
+	    var wrappedCb = function wrappedCb(data) {
 	        stopReplying(req);
-	        return cb();
+	        return cb(data);
 	    };
 	
 	    reply(req, wrappedCb);

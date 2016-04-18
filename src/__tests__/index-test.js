@@ -23,6 +23,20 @@ describe('Radio', () => {
 
     });
 
+    it('should reply to a request with data', () => {
+
+        // Register reply
+        Radio.reply('test-req', (data) => {
+            return 10 + data;
+        });
+
+        // Make request
+        let returnValue = Radio.request('test-req', 5);
+
+        expect(returnValue).toBe(15);
+
+    });
+
     it('should emit', () => {
 
         // Cb function
@@ -35,6 +49,21 @@ describe('Radio', () => {
         Radio.emit('test-emit');
 
         expect(cb).toBeCalled();
+
+    });
+
+    it('should emit with data', () => {
+
+        // Cb function
+        let cb = jest.genMockFn();
+
+        // Register listener
+        Radio.on('test-emit', cb);
+
+        // Emit
+        Radio.emit('test-emit', 'Hello');
+
+        expect(cb).toBeCalledWith('Hello');
 
     });
 
