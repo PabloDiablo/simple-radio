@@ -52,7 +52,7 @@ class SimpleRadio {
         storedEvent.handlers = storedEvent.handlers.filter(x => x !== cb);
     }
 
-    emit(evt: string, data: Object): void {
+    emit(evt: string): void {
         // Type and value check
         if (!evt || typeof evt !== 'string') {
             return;
@@ -65,12 +65,14 @@ class SimpleRadio {
         if (!storedEvent) {
             return;
         }
+		
+		const args = Array.prototype.slice.call(arguments, 1);
 
         // Execute each handler
-        storedEvent.handlers.forEach(cb => cb(data));
+        storedEvent.handlers.forEach(cb => cb(...args));
     }
 
-    request(req: string, data: Object): any {
+    request(req: string): any {
         // Type and value check
         if (!req || typeof req !== 'string') {
             return undefined;
@@ -84,7 +86,9 @@ class SimpleRadio {
             return undefined;
         }
 
-        return cb(data);
+		const args = Array.prototype.slice.call(arguments, 1);
+		
+        return cb(...args);
     }
 
     reply(req: string, cb: Function): void {
@@ -104,9 +108,10 @@ class SimpleRadio {
         }
 
         // Wrap callback fn to remove after first execution
-        const wrappedCb = (data) => {
+        const wrappedCb = () => {
             this.stopReplying(req);
-            return cb(data);
+			const args = Array.prototype.slice.call(arguments, 1);
+            return cb(...args);
         };
 
         this.reply(req, wrappedCb);
