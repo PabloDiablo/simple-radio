@@ -30,6 +30,7 @@
     "babel-preset-es2015-ie": "^6.6.1",
     "invariant": "^2.2.1",
     "jest": "^0.1.40",
+    "jest-cli": "^14.1.0",
     "key-mirror": "^1.0.1",
     "webpack": "^1.4.15"
   },
