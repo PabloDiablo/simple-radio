@@ -134,4 +134,4 @@ class SimpleRadio {
 
 }
 
-export default SimpleRadio;
+module.exports = SimpleRadio;
