@@ -1,6 +1,6 @@
 jest.dontMock('../index');
 
-var SimpleRadio = require('../index').default;
+var SimpleRadio = require('../index');
 var Radio = new SimpleRadio();
 
 describe('Radio', () => {
@@ -62,9 +62,9 @@ describe('Radio', () => {
         Radio.on('test-emit', cb);
 
         // Emit
-        Radio.emit('test-emit', 'Hello');
+        Radio.emit('test-emit', 'Hello', 'World');
 
-        expect(cb).toBeCalledWith('Hello');
+        expect(cb).toBeCalledWith('Hello', 'World');
 
     });
 
