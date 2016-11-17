@@ -59,9 +59,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -117,7 +115,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	    };
 	
-	    SimpleRadio.prototype.emit = function emit(evt, data) {
+	    SimpleRadio.prototype.emit = function emit(evt) {
 	        // Type and value check
 	        if (!evt || typeof evt !== 'string') {
 	            return;
@@ -131,13 +129,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return;
 	        }
 	
+	        var args = Array.prototype.slice.call(arguments, 1);
+	
 	        // Execute each handler
 	        storedEvent.handlers.forEach(function (cb) {
-	            return cb(data);
+	            return cb.apply(undefined, _toConsumableArray(args));
 	        });
 	    };
 	
-	    SimpleRadio.prototype.request = function request(req, data) {
+	    SimpleRadio.prototype.request = function request(req) {
 	        // Type and value check
 	        if (!req || typeof req !== 'string') {
 	            return undefined;
@@ -151,7 +151,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return undefined;
 	        }
 	
-	        return cb(data);
+	        var args = Array.prototype.slice.call(arguments, 1);
+	
+	        return cb.apply(undefined, _toConsumableArray(args));
 	    };
 	
 	    SimpleRadio.prototype.reply = function reply(req, cb) {
@@ -165,7 +167,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	
 	    SimpleRadio.prototype.replyOnce = function replyOnce(req, cb) {
-	        var _this = this;
+	        var _this = this,
+	            _arguments = arguments;
 	
 	        // Type and value check
 	        if (!req || !cb || typeof req !== 'string' || typeof cb !== 'function') {
@@ -173,9 +176,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	
 	        // Wrap callback fn to remove after first execution
-	        var wrappedCb = function wrappedCb(data) {
+	        var wrappedCb = function wrappedCb() {
 	            _this.stopReplying(req);
-	            return cb(data);
+	            var args = Array.prototype.slice.call(_arguments, 1);
+	            return cb.apply(undefined, _toConsumableArray(args));
 	        };
 	
 	        this.reply(req, wrappedCb);
@@ -205,7 +209,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return SimpleRadio;
 	}();
 	
-	exports.default = SimpleRadio;
+	module.exports = SimpleRadio;
 
 /***/ }
 /******/ ])
